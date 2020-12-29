@@ -13,7 +13,7 @@ ReactDOM.render(
   <React.StrictMode>
     <Router>
       <Route exact path='/' children={<MainScreen/>}/>
-      <Route path='/conference/:conferenceId' children={<Conference/>}/>
+      <Route exact path='/conference/:conferenceId/:callerId' children={<Conference/>}/>
     </Router>
   </React.StrictMode>,
   document.getElementById('root')
