@@ -1,15 +1,16 @@
 import Peer from 'simple-peer'
-import { Typography, Paper, Input, IconButton, Icon } from '@material-ui/core'
+import { Typography, Paper, Input, IconButton, Icon, List, ListItem } from '@material-ui/core'
 import 'fontsource-roboto'
 import { makeStyles } from '@material-ui/core'
 import SendIcon from '@material-ui/icons/Send'
 import { useEffect, useState } from 'react'
+import ChatMessage from './ChatMessage'
 
 const useStyles = makeStyles((theme) => ({
     sidenavWrapper: {
         display: 'flex',
         flexDirection: 'column',
-        height: '100%'
+        height: '100%',
     }
 }))
 
@@ -41,32 +42,26 @@ export default function ChatWindow({ socket }) {
     }, [socket])
     return (
         <Paper className={classes.sidenavWrapper}>
-            <div div style={{ display: 'flex', flexDirection: 'column', height:'100%' }}>
-                <div style={{ display: 'flex', flexDirection: 'column', height: '95%', overflow: 'scroll' }}>
-                    {
-                        messages.map((val, idx) => (
-                            <Paper>
-                                <Typography>
-                                    {val.message}
-                                </Typography>
-                                <Typography>
-                                    {val.username}
-                                </Typography>
-                            </Paper>
-                        ))
-                    }
+            <div style={{ display: 'flex', flexDirection: 'column', overflow: 'hidden', height: '100%' }}>
+                <div style={{ overflow: 'hidden', flexGrow: 1 }}>
+                    <List style={{ display: 'flex', flexDirection: 'column', overflow: 'scroll', height: '100%' }}>
+                        {
+                            messages.map((val, idx) => <ChatMessage author={'autor'} message={'mesaj blana'} />)
+                        }
+                    </List>
                 </div>
-                <div style={{ display: 'flex', flexDirection: 'row', height: '5%' }}>
+
+                <div style={{ height: 'auto', display: 'flex', flexDirection: 'row' }}>
                     <Input onChange={(val) => { message = val }}>
 
                     </Input>
                     <IconButton onClick={() => {
                         if (socket) {
-                            socket.current.emit('room-chat-message-post', ({userId:'cox' ,username: 'cox', message: '123' }))
+                            socket.current.emit('room-chat-message-post', ({ userId: 'cox', username: 'cox', message: '123' }))
                             console.log('sent message')
                         }
                         else {
-                            console.log('curently not working',socket)
+                            console.log('curently not working', socket)
                         }
                     }}>
                         <Icon>

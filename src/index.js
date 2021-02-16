@@ -1,9 +1,9 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import './index.css'
-import MainScreen from './main/components/MainScreen'
+import MainScreen from './bundles/main/components/MainScreen'
 import reportWebVitals from './reportWebVitals'
-import Conference from './conference/components/Conference'
+import Conference from './bundles/conference/components/Conference'
 import {
   BrowserRouter as Router,
   Route,
@@ -13,7 +13,7 @@ ReactDOM.render(
   <React.StrictMode>
     <Router>
       <Route exact path='/' children={<MainScreen/>}/>
-      <Route exact path='/conference/:conferenceId/:callerId' children={<Conference/>}/>
+      <Route exact path='/conference/:conferenceId' children={<Conference/>}/>
     </Router>
   </React.StrictMode>,
   document.getElementById('root')

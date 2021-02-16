@@ -1,7 +1,7 @@
 import 'fontsource-roboto'
 import Peer from 'peerjs'
 import { Paper, Typography } from '@material-ui/core'
-import { useEffect, useState, useRef } from 'react'
+import { useEffect, useState, useRef, useContext } from 'react'
 import { makeStyles } from '@material-ui/core'
 import ChatWindow from './ChatWindow'
 import { useParams } from 'react-router-dom'
@@ -12,7 +12,7 @@ const useStyles = makeStyles((theme) => ({
 	body: {
 		display: 'grid',
 		gridTemplateColumns: '10fr 2fr',
-		gridTemplateRows: 'fit-content() fit-content() fit-content()',
+		gridTemplateRows: 'auto 1fr auto',
 		height: '100vh',
 	},
 	mainScreen: {
@@ -75,12 +75,30 @@ export default function Conference() {
 	const [streamSettings, updateStreamSettings] = useState({ video: true, audio: true })
 	const { conferenceId, callerId } = useParams()
 	const [peers, updatePeers] = useState([])
+	const auth = useContext()
 
 	let myPeer = useRef(null)
 	let socket = useRef(null)
+	let mediaStream = useRef(navigator.mediaDevices.getUserMedia({ video: true, audio: false }))
 
 	useEffect(() => {
 		myPeer.current = new Peer(callerId, { host: 'localhost', port: 9000, path: '/signaling' })
+		myPeer.current.on('connection', (connection) => {
+			connection.on('data', (message) => {
+			})
+		})
+
+		myPeer.current.on('call', function (call) {
+			mediaStream.current
+				.then(stream => {
+					call.answer(stream)
+					call.on('stream', (remoteStream) => {
+						//
+					})
+				}).catch(err => {
+					console.log('failed to get stream', err)
+				})
+		})
 	}, [callerId])
 
 	useEffect(() => {
@@ -92,8 +110,33 @@ export default function Conference() {
 			socket.current.on('message', (data) => {
 				console.log(data)
 			})
-			socket.current.on('room-users', (data) => {
-				updatePeers(data.users.filter(val => val.id !== id).map(val => ({ id: val.id, username: val.username, ref: undefined })))
+			socket.current.on('room-users', ({ users }) => {
+				updatePeers(users.filter(user => user.id !== id).map(user => ({ id: user.id, username: user.username, ref: undefined })))
+				users.filter(user => user.id !== id).forEach(user => {
+					let peerDataConnection = myPeer.current.connect(user.id)
+
+					peerDataConnection.on('open', () => {
+						peerDataConnection.send('im in')
+					})
+
+					mediaStream.current.then(stream => {
+						let peerCallConnection = myPeer.current.call(user.id, stream)
+						peerCallConnection.on('stream', (remoteStream) => {
+
+							let videoTag = document.getElementById(`video${user.id}`)
+
+							try {
+								videoTag.srcObject=remoteStream
+							}
+							catch (err) {
+								console.log(err)
+							}
+						})
+					}).catch(err => {
+						console.log('error getting mediaStream', err)
+					})
+
+				})
 			})
 			socket.current.on('room-users-joined', ({ userId, username }) => {
 				updatePeers((peers) => [...peers, { id: userId, username: username, ref: undefined }])
@@ -127,10 +170,12 @@ export default function Conference() {
 		updateStreamSettings(stream => ({ video: true, audio: stream.audio }))
 	}
 
+	console.log('rerender fuck yea')
+
 	return (
 		<div className={classes.body}>
 			<div style={{ gridRow: 1, gridColumnStart: 1, gridColumnEnd: 3, }}>
-				<Paper style={{height:'100%', width:'100%', display:'flex',flexDirection:'row'}}>
+				<Paper style={{ height: '100%', width: '100%', display: 'flex', flexDirection: 'row' }}>
 					cox?
 				</Paper>
 			</div>
@@ -138,14 +183,14 @@ export default function Conference() {
 				{
 					peers.map((val, idx) => (
 						<div className={classes.participantWrapper} style={{ backgroundColor: getRandomColor() }}>
-							<video className={classes.participantVideo} ref={val.ref} />
+							<video id={`video${val.id}`} className={classes.participantVideo} autoPlay/>
 							<Typography className={classes.participantNameTypography}>
 								{val.username}
 							</Typography>
 						</div>))
 				}
 			</Paper>
-			<div style={{ gridRow: 2, gridColumn: 2 }}>
+			<div style={{ gridRow: 2, gridColumn: 2, overflow: 'hidden' }}>
 				<ChatWindow socket={socket} />
 			</div>
 			<div style={{ gridRow: 3, gridColumnStart: 1, gridColumnEnd: 3 }}>
