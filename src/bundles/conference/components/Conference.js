@@ -70,16 +70,18 @@ const useStyles = makeStyles((theme) => ({
 	}
 }))
 
-export default function Conference() {
+export default function Conference({authContext}) {
 	const classes = useStyles()
 	const [streamSettings, updateStreamSettings] = useState({ video: true, audio: true })
-	const { conferenceId, callerId } = useParams()
 	const [peers, updatePeers] = useState([])
-	const auth = useContext()
+	const {userDetails} = useContext(authContext)
+	const callerId = userDetails.userId
+	const { conferenceId} = useParams()
 
 	let myPeer = useRef(null)
 	let socket = useRef(null)
 	let mediaStream = useRef(navigator.mediaDevices.getUserMedia({ video: true, audio: false }))
+
 
 	useEffect(() => {
 		myPeer.current = new Peer(callerId, { host: 'localhost', port: 9000, path: '/signaling' })
@@ -103,9 +105,7 @@ export default function Conference() {
 
 	useEffect(() => {
 		socket.current = socketIOClient()
-		console.log('set socket current here', socket)
 		myPeer.current.on('open', (id) => {
-			console.log(`my id is ${id}`)
 			socket.current.emit('join-room', ({ id: callerId, username: callerId, room: conferenceId }))
 			socket.current.on('message', (data) => {
 				console.log(data)
@@ -148,6 +148,10 @@ export default function Conference() {
 
 	}, [conferenceId, callerId])
 
+	useEffect(()=>{
+
+	},[userDetails])
+	
 	function getRandomColor() {
 		var letters = '0123456789ABCDEF';
 		var color = '#';

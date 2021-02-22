@@ -8,12 +8,13 @@ import {
   BrowserRouter as Router,
   Route,
 } from "react-router-dom";
+import authContext from './context/authContext'
 
 ReactDOM.render(
   <React.StrictMode>
     <Router>
       <Route exact path='/' children={<MainScreen/>}/>
-      <Route exact path='/conference/:conferenceId' children={<Conference/>}/>
+      <Route exact path='/conference/:conferenceId' children={<Conference authContext={authContext}/>}/>
     </Router>
   </React.StrictMode>,
   document.getElementById('root')
