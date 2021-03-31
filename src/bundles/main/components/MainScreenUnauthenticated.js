@@ -1,73 +1,79 @@
-import './MainScreen.css';
-import {Grid, InputLabel,Typography, Input, Button, FormControl, TextField} from '@material-ui/core'
-import 'fontsource-roboto';
-import { makeStyles } from '@material-ui/core/styles'
+import React from 'react'
+import './MainScreen.css'
+import { Grid, Button, TextField } from '@material-ui/core'
+import 'fontsource-roboto'
+import { useFormik } from 'formik'
+import * as yup from 'yup'
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    display:'grid',
-    gridTemplateRows:'1fr 6fr 3fr',
-    width: '100vw',
-    height: '100vh'
-  },
-  paper: {
-    padding: theme.spacing(2),
-    textAlign: 'center',
-    color: theme.palette.text.secondary,
+const joinConferenceValidationSchema = yup.object({
+  conferenceId: yup
+    .string('')
+    .required('')
+})
+
+const authValidationSchema = yup.object({
+  email: yup
+    .string('')
+    .required(''),
+  password: yup
+    .string('')
+    .required('')
+})
+
+export default function MainScreenUnauthenticated () {
+  const joinConferenceFormik = useFormik({
+    initialValues: {
+      conferenceId: ''
+    },
+    validationSchema: joinConferenceValidationSchema,
+    onSubmit: (values) => {
+      console.log(values)
+    }
+  })
+  const authFormik = useFormik({
+    initialValues: {
+      email: '',
+      password: ''
+    },
+    validationSchema: authValidationSchema,
+    onSubmit: (values) => {
+      console.log(values)
+    }
   }
-}))
+  )
 
-export default function MainScreenUnauthenticated(){
-    const classes = useStyles()
-
-    return (<Grid container spacing={3} alignItems='center'>
-        <Grid item xs={9}>
-          <Grid container spacing={3} direction='column' alignItems='center'>
-            <Grid item xs={12}>
-              <Typography>
-                Join via meeting ID
-              </Typography>              
-             </Grid>
-            <Grid item xs={12}>
-              <FormControl>
-                <InputLabel htmlFor='meeting-id-input'>Meeting id</InputLabel>
-                <Input id='meeting-id-input'/>
-              </FormControl>         
-            </Grid>
-            <Grid item xs={12}>
-              <Button>
-                Join meeting
-              </Button>
-            </Grid>
-          </Grid>
-        </Grid>
+  return (
+    <Grid container spacing={3} alignItems='center'>
         <Grid item xs={3}>
-            <Grid container spacing={3} alignItems='center' direction='column'>
-              <Grid item xs={12}>
-                <FormControl xs={3}>
-                  <InputLabel htmlFor='email-input'>Email</InputLabel>
-                  <Input id='email-input'/>
-                </FormControl>          
-              </Grid>
-              
-              <Grid item xs={12}>
-                <FormControl xs={3}>
-                  <InputLabel htmlFor="password-input">Password</InputLabel>
-                  <Input id="password-input"/>
-                </FormControl>
-              </Grid>
-              
-              <Grid item xs={12}>
-                <Button >
-                  sign in
-                </Button>
-              </Grid>
-              <Grid item xs={12}>
-                <Button>
-                  register
-                </Button>
-              </Grid>
-            </Grid>
+            <form style={{ display: 'flex', flexDirection: 'column' }} onSubmit={joinConferenceFormik.handleSubmit}>
+              <TextField
+                  id="conferenceId"
+                  name="conferenceId"
+                  value={joinConferenceFormik.values.conferenceId}
+                  onChange={joinConferenceFormik.handleChange}/>
+              <Button type='submit' disabled={joinConferenceFormik.isSubmitting}>
+                join conference
+              </Button>
+            </form>
+        </Grid>
+        <Grid item xs={6}/>
+        <Grid item xs={3}>
+          <form style={{ display: 'flex', flexDirection: 'column' }} onSubmit={authFormik.handleSubmit}>
+            <TextField
+                id="username"
+                name="username"
+                value={authFormik.values.conferenceId}
+                onChange={authFormik.handleChange}/>
+            <TextField
+                id="password"
+               name="password"
+               value={authFormik.values.conferenceId}
+               onChange={authFormik.handleChange}/>
+            <Button type='submit' disabled={authFormik.isSubmitting}>sign in</Button>
+            <Button>
+              register
+            </Button>
+          </form>
         </Grid>
       </Grid>)
 }

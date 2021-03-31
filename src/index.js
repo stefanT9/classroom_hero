@@ -1,23 +1,27 @@
-import React from 'react'
-import ReactDOM from 'react-dom'
-import './index.css'
-import MainScreen from './bundles/main/components/MainScreen'
-import reportWebVitals from './reportWebVitals'
-import Conference from './bundles/conference/components/Conference'
-import {
-  BrowserRouter as Router,
-  Route,
-} from "react-router-dom";
-import authContext from './context/authContext'
+import React from "react";
+import ReactDOM from "react-dom";
+import "./index.css";
+import MainScreen from "./bundles/main/components/MainScreen";
+import reportWebVitals from "./reportWebVitals";
+import Conference from "./bundles/conference/components/Conference";
+import { BrowserRouter as Router, Route } from "react-router-dom";
+import authContext from "./context/authContext";
+import AuthContextStore from "./context/authContext";
 
 ReactDOM.render(
   <React.StrictMode>
-    <Router>
-      <Route exact path='/' children={<MainScreen/>}/>
-      <Route exact path='/conference/:conferenceId' children={<Conference authContext={authContext}/>}/>
-    </Router>
+    <AuthContextStore>
+      <Router>
+        <Route exact path="/" children={<MainScreen />} />
+        <Route
+          exact
+          path="/conference/:conferenceId"
+          children={<Conference />}
+        />
+      </Router>
+    </AuthContextStore>
   </React.StrictMode>,
-  document.getElementById('root')
+  document.getElementById("root")
 );
 
 // If you want to start measuring performance in your app, pass a function
