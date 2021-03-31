@@ -1,0 +1,65 @@
+.body {
+  display: grid;
+  grid-template-columns: 10fr 2fr;
+  grid-template-rows: auto 1fr auto;
+  height: 100vh;
+}
+.mainScreen {
+  display: grid;
+  grid-template-columns: "repeat(auto-fit, minmax(300px,1fr))";
+  height: 100%;
+  gap: 0.5rem;
+  overflow: "scroll";
+  &::-webkit-scrollbar {
+    width: 0.4rem;
+  }
+}
+.participantWrapper {
+  flex-shrink: "auto";
+  flex-grow: "auto";
+  min-width: "300px";
+  min-height: "300px";
+  display: "grid";
+  grid-template-rows: "3fr 1fr 1fr";
+  grid-template-columns: "3fr 1fr 1fr 1fr 3fr";
+  justify-items: "center";
+}
+.participantVideo {
+  grid-row-start: 1;
+  grid-row-end: 4;
+  grid-column-start: 1;
+  grid-column-end: 6;
+  width: "100%";
+  height: "100%";
+}
+.muteParticipantButton {
+  grid-row: 3;
+  grid-column: 2;
+}
+.stopParticipantVideo {
+  grid-row: 3;
+  grid-column: 4;
+}
+.participantNameTypography {
+  grid-row: 3;
+  grid-column-start: 2;
+  grid-column-end: 5;
+}
+.sidenavWrapper {
+  display: "flex";
+  background-color: "gray";
+  height: "100%";
+}
+.callSettingsWrapper {
+  display: "flex";
+  grid-column-start: "1";
+  grid-column-end: "3";
+  flex-direction: "row";
+  justify-content: "center";
+}
+
+.sidenavWrapper {
+  display: "flex";
+  flex-direction: "column";
+  height: "100%";
+}

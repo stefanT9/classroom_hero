@@ -5,8 +5,7 @@ import MainScreen from "./bundles/main/components/MainScreen";
 import reportWebVitals from "./reportWebVitals";
 import Conference from "./bundles/conference/components/Conference";
 import { BrowserRouter as Router, Route } from "react-router-dom";
-import authContext from "./context/authContext";
-import AuthContextStore from "./context/authContext";
+import AuthContextStore, { AuthContext } from "./context/authContext";
 
 ReactDOM.render(
   <React.StrictMode>
@@ -16,7 +15,11 @@ ReactDOM.render(
         <Route
           exact
           path="/conference/:conferenceId"
-          children={<Conference />}
+          children={
+            <AuthContext.Consumer>
+              {({ userDetails }) => <Conference userDetails={userDetails} />}
+            </AuthContext.Consumer>
+          }
         />
       </Router>
     </AuthContextStore>
