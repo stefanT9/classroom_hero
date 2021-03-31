@@ -43,11 +43,14 @@ export default function ChatWindow(props: ChatWindowProps) {
     onSubmit: (values) => {
       if (socket) {
         console.log("message sent");
-        socket.emit("room-chat-message-post", {
+
+        const message = {
           userId: userDetails.id,
           username: userDetails.username,
           message: values.message,
-        });
+          dateTime: new Date(),
+        };
+        socket.emit("room-chat-message-post", message);
       } else {
         console.log("curently not working", socket);
       }
@@ -70,6 +73,7 @@ export default function ChatWindow(props: ChatWindowProps) {
         // recives a new message
         socket.on("room-chat-message-post", (message: Message) => {
           console.log("something good here");
+          message.dateTime = new Date(message.dateTime);
           setMessages((messages) => [...messages, message]);
         });
         clearInterval(socketInitialisedInterval);
@@ -80,7 +84,7 @@ export default function ChatWindow(props: ChatWindowProps) {
     <Paper className={classes.sidenavWrapper}>
       <div style={{ display: "flex", flexDirection: "column", height: "100%" }}>
         <div style={{ flexGrow: 1, overflow: "scroll" }}>
-          <List style={{ display: "flex", flexDirection: "column" }}>
+          <div style={{ display: "flex", flexDirection: "column" }}>
             {messages.map((val: Message) => {
               console.log(val);
               return (
@@ -88,10 +92,11 @@ export default function ChatWindow(props: ChatWindowProps) {
                   author={val.username}
                   message={val.message}
                   dateTime={val.dateTime}
+                  isMine={userDetails.id === val.userId}
                 />
               );
             })}
-          </List>
+          </div>
         </div>
 
         <form
