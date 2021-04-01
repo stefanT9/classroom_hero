@@ -13,6 +13,9 @@ export const AuthContext = createContext({
   register: (email: string, password: string) => {},
   logout: () => {},
   softLogin: (username: string) => {},
+  isAuth: () => {
+    return Boolean(true);
+  },
 });
 
 const AuthContextStore = (props: any) => {
@@ -32,11 +35,20 @@ const AuthContextStore = (props: any) => {
   const logout = () => {
     setUserDetails(defaultUserDetails);
   };
+  const isAuth = () => {
+    if (!userDetails.id || userDetails.id.startsWith("tmp")) {
+      console.log("is not auth");
+      return false;
+    } else {
+      console.log("is auth");
+      return true;
+    }
+  };
   useEffect(() => {}, []);
 
   return (
     <AuthContext.Provider
-      value={{ userDetails, login, register, logout, softLogin }}
+      value={{ userDetails, isAuth, login, register, logout, softLogin }}
     >
       {props.children}
     </AuthContext.Provider>

@@ -1,0 +1,16 @@
+.loginForm {
+  display: flex;
+  flex-direction: column;
+}
+
+.loginForm * {
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.dialogTop {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 100%;
+}

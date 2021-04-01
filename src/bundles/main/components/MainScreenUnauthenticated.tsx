@@ -1,4 +1,6 @@
 import React from "react";
+import { useHistory } from "react-router-dom";
+
 import { Grid, Button, TextField } from "@material-ui/core";
 import "fontsource-roboto";
 import { useFormik } from "formik";
@@ -12,8 +14,14 @@ const authValidationSchema = yup.object({
   email: yup.string().required(),
   password: yup.string().required(),
 });
-
-export default function MainScreenUnauthenticated() {
+interface MainScreenUnauthProps {
+  login(email: string, password: string): void;
+}
+export default function MainScreenUnauthenticated(
+  props: MainScreenUnauthProps
+) {
+  const { login } = props;
+  const history = useHistory();
   const joinConferenceFormik = useFormik({
     initialValues: {
       conferenceId: "",
@@ -21,6 +29,7 @@ export default function MainScreenUnauthenticated() {
     validationSchema: joinConferenceValidationSchema,
     onSubmit: (values) => {
       console.log(values);
+      history.push(`/conference/${values.conferenceId}`);
     },
   });
   const authFormik = useFormik({
@@ -30,6 +39,7 @@ export default function MainScreenUnauthenticated() {
     },
     validationSchema: authValidationSchema,
     onSubmit: (values) => {
+      login(values.email, values.password);
       console.log(values);
     },
   });
