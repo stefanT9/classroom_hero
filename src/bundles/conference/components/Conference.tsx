@@ -158,7 +158,9 @@ export default function Conference(props: ConferenceProps) {
     <>
       <AuthContext.Consumer>
         {({ userDetails, softLogin }) =>
-          !!!userDetails.username && (
+          softLogin &&
+          userDetails &&
+          !userDetails.username && (
             <SelectUsernameModal open={true} softLogin={softLogin} />
           )
         }

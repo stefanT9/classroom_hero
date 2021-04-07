@@ -1,10 +1,11 @@
 import React from "react";
 import "fontsource-roboto";
 import Topnav from "../../common/components/Topnav";
-import MainScreenUnauthenticated from "./MainScreenUnauthenticated";
 import { makeStyles } from "@material-ui/core";
 import { AuthContext } from "../../../context/authContext";
-import { Dashboard } from "@material-ui/icons";
+
+import MainScreenLogin from "./mainScreenLogin";
+import MainScreenDashboard from "./mainScreenDashboard";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -25,19 +26,25 @@ export default function MainScreen() {
 
   return (
     <AuthContext.Consumer>
-      {({ userDetails, isAuth, login, register, logout }) => (
-        <div className={classes.root}>
-          <Topnav
-            userDetails={userDetails}
-            isAuth={isAuth}
-            login={login}
-            logout={logout}
-            register={register}
-          />
-          {isAuth() && <Dashboard />}
-          {!isAuth() && <MainScreenUnauthenticated login={login} />}
-        </div>
-      )}
+      {({ userDetails, isAuth, login, register, logout }) =>
+        userDetails &&
+        isAuth &&
+        login &&
+        register &&
+        logout && (
+          <div className={classes.root}>
+            <Topnav
+              userDetails={userDetails}
+              isAuth={isAuth}
+              login={login}
+              logout={logout}
+              register={register}
+            />
+            {isAuth() && <MainScreenDashboard userDetails={userDetails} />}
+            {!isAuth() && <MainScreenLogin login={login} />}
+          </div>
+        )
+      }
     </AuthContext.Consumer>
   );
 }

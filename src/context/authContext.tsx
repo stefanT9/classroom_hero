@@ -1,38 +1,71 @@
 import React, { createContext, useState, useEffect } from "react";
 import { v4 as uuidV4 } from "uuid";
+import { useCookies } from "react-cookie";
 
 const defaultUserDetails: UserDetails = {
   token: null,
   id: null,
   username: null,
 };
-
-export const AuthContext = createContext({
-  userDetails: defaultUserDetails,
-  login: (email: string, password: string) => {},
-  register: (email: string, password: string) => {},
-  logout: () => {},
-  softLogin: (username: string) => {},
-  isAuth: () => {
-    return Boolean(true);
-  },
-});
+interface AuthContextInterface {
+  userDetails: UserDetails;
+  login: (email: string, password: string) => Promise<any>;
+  register: (email: string, password: string) => Promise<any>;
+  softLogin: (username: string) => Promise<any>;
+  logout: () => Promise<any>;
+  isAuth: () => any;
+}
+export const AuthContext = createContext<Partial<AuthContextInterface>>({});
 
 const AuthContextStore = (props: any) => {
   const [userDetails, setUserDetails] = useState<UserDetails>(
     defaultUserDetails
   );
 
-  const softLogin = (username: string) => {
+  const [cookies, setCookie] = useCookies(["access_token"]);
+
+  const softLogin = async (username: string) => {
     setUserDetails((userDetails: UserDetails) => ({
       ...userDetails,
       username: username,
       id: `tmp_${uuidV4()}`,
     }));
   };
-  const login = (email: string, password: string) => {};
-  const register = (email: string, password: string) => {};
-  const logout = () => {
+  const login = async (email: string, password: string) => {
+    return fetch("/api/auth/login", {
+      method: "POST",
+      body: JSON.stringify({
+        email,
+        password,
+      }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        console.log("heres the body", res);
+        if (res.message) {
+          throw new Error(res.message);
+        }
+        setUserDetails({
+          username: res.user.email,
+          id: res.user._id,
+          token: res.token,
+        });
+        setCookie("access_token", res.token);
+        return true;
+      })
+      .catch((err) => {
+        console.log("heres the error", err);
+        return {
+          status: false,
+          message: err.message,
+        };
+      });
+  };
+  const register = async (email: string, password: string) => {};
+  const logout = async () => {
     setUserDetails(defaultUserDetails);
   };
   const isAuth = () => {

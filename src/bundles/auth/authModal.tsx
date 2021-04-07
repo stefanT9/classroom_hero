@@ -9,7 +9,8 @@ import React, { useState } from "react";
 import LoginForm from "./loginForm";
 import { AuthContext } from "../../context/authContext";
 import classes from "./auth.module.scss";
-import { CloseOutlined } from "@material-ui/icons";
+import ResetPasswordForm from "./resetPasswordForm";
+import RegisterForm from "./registerForm";
 
 const LoginModal = (
   props: DialogProps & { formType: "Login" | "Register" | "ResetPassword" }
@@ -22,7 +23,7 @@ const LoginModal = (
 
   const handleChangeToLogin = () => {
     setIsLoading(true);
-    setFormType(FormType.Login);
+    setFormType("Login");
     setIsLoading(false);
   };
   const handleChangeToResetPassword = () => {
@@ -38,30 +39,37 @@ const LoginModal = (
   };
   return (
     <AuthContext.Consumer>
-      {({ login }) => (
-        <Dialog
-          fullWidth={true}
-          maxWidth="xs"
-          scroll={"paper"}
-          {...dialogProps}
-        >
-          <Paper className={classes.dialogTopnav}>
-            <DialogTitle>{formType}</DialogTitle>
-          </Paper>
-          <LoginForm login={login} />
-          {formType !== "Login" && (
-            <Button onClick={handleChangeToLogin}>Sign in</Button>
-          )}
-          {formType !== "ResetPassword" && (
-            <Button onClick={handleChangeToResetPassword}>
-              Resert password
-            </Button>
-          )}
-          {formType !== "Register" && (
-            <Button onClick={handleChangeToRegister}>Sign up</Button>
-          )}
-        </Dialog>
-      )}
+      {({ login }) =>
+        login && (
+          <Dialog
+            fullWidth={true}
+            maxWidth="xs"
+            scroll={"paper"}
+            {...dialogProps}
+          >
+            <Paper className={classes.dialogTopnav}>
+              <DialogTitle>{formType}</DialogTitle>
+            </Paper>
+            {formType === "Login" && <LoginForm login={login} />}
+            {formType === "Register" && <RegisterForm />}
+            {formType === "ResetPassword" && <ResetPasswordForm />}
+            <div style={{ height: "2rem" }} />
+            {formType !== "Login" && (
+              <Button onClick={handleChangeToLogin}>Sign in</Button>
+            )}
+            {formType !== "ResetPassword" && (
+              <Button onClick={handleChangeToResetPassword}>
+                Forgot password?
+              </Button>
+            )}
+            {formType !== "Register" && (
+              <Button onClick={handleChangeToRegister}>
+                Don't have an account? Sign up !
+              </Button>
+            )}
+          </Dialog>
+        )
+      }
     </AuthContext.Consumer>
   );
 };

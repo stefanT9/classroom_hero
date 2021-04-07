@@ -3,17 +3,16 @@ import { Button, Container, TextField, Typography } from "@material-ui/core";
 import React from "react";
 import * as yup from "yup";
 import { useFormik } from "formik";
-import { Link } from "react-router-dom";
 
-type LoginFormTypes = {
-  login: (email: string, password: string) => void;
+type LoginFormInterface = {
+  login: (email: string, password: string) => Promise<any>;
 };
 const authValidationSchema = yup.object({
   email: yup.string().email().required(),
   password: yup.string().required(),
 });
 
-const LoginForm = (props: LoginFormTypes) => {
+const LoginForm = (props: LoginFormInterface) => {
   const { login } = props;
 
   const authFormik = useFormik({
@@ -23,8 +22,13 @@ const LoginForm = (props: LoginFormTypes) => {
     },
     validationSchema: authValidationSchema,
     onSubmit: (values) => {
-      login(values.email, values.password);
-      console.log(values);
+      login(values.email, values.password)
+        .then((res) => {
+          console.log(res);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     },
   });
   return (
@@ -46,10 +50,7 @@ const LoginForm = (props: LoginFormTypes) => {
           error={Boolean(authFormik.errors.password)}
           onChange={authFormik.handleChange}
         />
-        <Button
-          disabled={authFormik.isSubmitting || !authFormik.isValid}
-          type="submit"
-        >
+        <Button disabled={!authFormik.isValid} type="submit">
           Login
         </Button>
       </form>

@@ -10,7 +10,7 @@ const validationSchema = yup.object({
 });
 
 interface SelectUsernameModalProps {
-  softLogin: Function;
+  softLogin: (email: string) => Promise<any>;
   open: boolean;
 }
 const SelectUsernameModal = (props: SelectUsernameModalProps) => {
@@ -23,7 +23,11 @@ const SelectUsernameModal = (props: SelectUsernameModalProps) => {
     validationSchema: validationSchema,
     onSubmit: (values, { setSubmitting, resetForm }) => {
       // TODO: get this xvalues from servers
-      softLogin(formik.values.username);
+      if (softLogin) {
+        softLogin(formik.values.username);
+      } else {
+        console.error("something went wrong with auth context");
+      }
     },
   });
 
