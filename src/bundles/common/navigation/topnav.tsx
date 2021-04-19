@@ -1,8 +1,10 @@
 import React, { useState } from "react";
-import { Grid, Button, Typography } from "@material-ui/core";
+import classes from "../common.module.scss";
+import { Grid, Button, Typography, Container } from "@material-ui/core";
 import MenuIcon from "@material-ui/icons/Menu";
-import classes from "./common.module.scss";
 import AuthModal from "../../auth/authModal";
+import ProfileChip from "./profileChip";
+
 interface TopnavProps {
   userDetails: UserDetails;
   login: (email: string, password: string) => void;
@@ -11,7 +13,7 @@ interface TopnavProps {
   isAuth: () => boolean;
 }
 export default function Topnav(props: TopnavProps) {
-  const { userDetails, isAuth, login, register } = props;
+  const { userDetails, isAuth, login, register, logout } = props;
   const [open, setOpen] = useState(false);
   const handleOpen = () => {
     setOpen(true);
@@ -19,18 +21,24 @@ export default function Topnav(props: TopnavProps) {
   const handleClose = () => {
     setOpen(false);
   };
+  console.log(isAuth(), userDetails);
   return (
     <Grid item xs={12}>
-      <div style={{ backgroundColor: "gray", height: "auto" }}>
-        <Grid container>
-          <div className={classes.topnav}>
+      <div className={classes["topnav-wrapper"]}>
+        <Container>
+          <div className={classes["topnav"]}>
             <Button>
-              <MenuIcon />
+              <MenuIcon className={classes["white-text"]} />
             </Button>
+            {isAuth() && (
+              <ProfileChip userDetails={userDetails} logout={logout} />
+            )}
             {!isAuth() && (
               <div>
                 <Button onClick={handleOpen}>
-                  <Typography>Login</Typography>
+                  <Typography className={classes["white-text"]}>
+                    Login
+                  </Typography>
                 </Button>
                 <AuthModal
                   onClose={handleClose}
@@ -40,7 +48,7 @@ export default function Topnav(props: TopnavProps) {
               </div>
             )}
           </div>
-        </Grid>
+        </Container>
       </div>
     </Grid>
   );

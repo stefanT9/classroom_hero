@@ -5,7 +5,7 @@ import { Grid, Button, TextField } from "@material-ui/core";
 import "fontsource-roboto";
 import { useFormik } from "formik";
 import * as yup from "yup";
-import LoginForm from "../../auth/loginForm";
+import LoginForm from "../auth/loginForm";
 
 const joinConferenceValidationSchema = yup.object({
   conferenceId: yup.string().required(),

@@ -11,6 +11,7 @@ import SelectUsernameModal from "./SelectUsernameModal";
 
 import classes from "./conference.module.scss";
 import { AuthContext } from "../../../context/authContext";
+import BaseLayout from "../../common/layout/layout";
 
 interface ConferenceProps {
   userDetails: UserDetails;
@@ -59,13 +60,14 @@ export default function Conference(props: ConferenceProps) {
       });
       return myPeer;
     });
-  }, []);
+  }, [userDetails]);
   useEffect(() => {
     setSocket((oldSocket: SocketIOClient.Socket | undefined) => {
       if (peer === undefined) return oldSocket;
 
       const socket = socketIOClient();
       peer.on("open", (id) => {
+        console.log(userDetails);
         socket.emit("join-room", {
           id: userDetails.id,
           username: userDetails.username,
@@ -103,7 +105,6 @@ export default function Conference(props: ConferenceProps) {
                     const videoTag: any = document.getElementById(
                       `video${user.id}`
                     );
-
                     try {
                       videoTag.srcObject = remoteStream;
                     } catch (err) {
@@ -117,20 +118,24 @@ export default function Conference(props: ConferenceProps) {
             });
         });
         socket.on("room-users-joined", ({ userId, username }: any) => {
+          console.log("user joined", userId, username);
           setPeers((peers: any) => [
             ...peers,
             { id: userId, username: username, ref: undefined },
           ]);
         });
         socket.on("room-users-left", ({ userId }: any) => {
+          console.log("user left", userId);
           setPeers((peers) => [...peers].filter((val) => val.id !== userId));
         });
       });
       return socket;
     });
-  }, [peer]);
+  }, [peer, userDetails]);
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+    console.log("peers changed", peers);
+  }, [peers]);
 
   function getRandomColor() {
     const letters = "0123456789ABCDEF";
@@ -155,15 +160,18 @@ export default function Conference(props: ConferenceProps) {
   }
 
   return (
-    <>
+    <BaseLayout>
       <AuthContext.Consumer>
-        {({ userDetails, softLogin }) =>
-          softLogin &&
-          userDetails &&
-          !userDetails.username && (
-            <SelectUsernameModal open={true} softLogin={softLogin} />
-          )
-        }
+        {({ userDetails, softLogin }) => {
+          console.log(userDetails);
+          return (
+            softLogin &&
+            userDetails &&
+            !userDetails.username && (
+              <SelectUsernameModal open={true} softLogin={softLogin} />
+            )
+          );
+        }}
       </AuthContext.Consumer>
       <div className={classes.body}>
         <div style={{ gridRow: 1, gridColumnStart: 1, gridColumnEnd: 3 }}>
@@ -177,21 +185,24 @@ export default function Conference(props: ConferenceProps) {
           ></Paper>
         </div>
         <Paper className={classes.mainScreen}>
-          {peers.map((val, idx) => (
-            <div
-              className={classes.participantWrapper}
-              style={{ backgroundColor: getRandomColor() }}
-            >
-              <video
-                id={`video${val.id}`}
-                className={classes.participantVideo}
-                autoPlay
-              />
-              <Typography className={classes.participantNameTypography}>
-                {val.username}
-              </Typography>
-            </div>
-          ))}
+          {peers.map((val, idx) => {
+            console.log("peer to interface", val);
+            return (
+              <div
+                className={classes.participantWrapper}
+                style={{ backgroundColor: getRandomColor() }}
+              >
+                <video
+                  id={`video${val.id}`}
+                  className={classes.participantVideo}
+                  autoPlay
+                />
+                <Typography className={classes.participantNameTypography}>
+                  {val.username}
+                </Typography>
+              </div>
+            );
+          })}
         </Paper>
         <div style={{ gridRow: 2, gridColumn: 2, overflow: "hidden" }}>
           {socket && <ChatWindow socket={socket} userDetails={userDetails} />}
@@ -206,6 +217,6 @@ export default function Conference(props: ConferenceProps) {
           />
         </div>
       </div>
-    </>
+    </BaseLayout>
   );
 }

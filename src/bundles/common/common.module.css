@@ -1,0 +1,13 @@
+.topnav {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.topnav-wrapper {
+  background-color: #1ba261;
+}
+
+.white-text {
+  color: white;
+}

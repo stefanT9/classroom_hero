@@ -1,0 +1,16 @@
+$primary-color: #1ba261;
+$accent-color: #1fb456;
+$background-color: #f2f2f2;
+
+html,
+body {
+  margin: 0;
+  background-color: $background-color;
+}
+
+.primary-button {
+  background-color: $primary-color;
+}
+.accent-button {
+  background-color: $accent-color;
+}

@@ -1,0 +1,17 @@
+$primary-color: #1ba261;
+$accent-color: #1fb456;
+$background-color: #f2f2f2;
+
+.topnav {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.topnav-wrapper {
+  background-color: $primary-color;
+}
+
+.white-text {
+  color: white;
+}

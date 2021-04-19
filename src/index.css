@@ -1,9 +1,13 @@
-* {
+html,
+body {
   margin: 0;
+  background-color: #f2f2f2;
 }
-body,
-html {
-  height: 100%;
-  width: 100%;
-  overflow: hidden;
+
+.primary-button {
+  background-color: #1ba261;
+}
+
+.accent-button {
+  background-color: #1fb456;
 }

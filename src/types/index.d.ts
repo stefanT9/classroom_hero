@@ -10,3 +10,11 @@ type Message = {
   message: String;
   dateTime: Date;
 };
+
+interface IConference {
+  _id: string;
+  name: string;
+  startTime: Date;
+  participantEmails: string[];
+  hostId: Types.ObjectId;
+}

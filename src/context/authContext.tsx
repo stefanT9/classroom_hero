@@ -67,6 +67,7 @@ const AuthContextStore = (props: any) => {
   const register = async (email: string, password: string) => {};
   const logout = async () => {
     setUserDetails(defaultUserDetails);
+    setCookie("access_token", null);
   };
   const isAuth = () => {
     if (!userDetails.id || userDetails.id.startsWith("tmp")) {
@@ -77,7 +78,25 @@ const AuthContextStore = (props: any) => {
       return true;
     }
   };
-  useEffect(() => {}, []);
+  useEffect(() => {
+    fetch("/api/auth/verify-token", { method: "POST" })
+      .then((res) => res.json())
+      .then((res) => {
+        if (res.user) {
+          setUserDetails((userDetails) => ({
+            ...userDetails,
+            username: res.user.email,
+            id: res.user._id,
+            token: cookies["access_token"],
+          }));
+        } else {
+          console.log(res.error);
+        }
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  }, []);
 
   return (
     <AuthContext.Provider
