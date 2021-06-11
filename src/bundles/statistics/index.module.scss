@@ -1,0 +1,12 @@
+.history-cards-list {
+  display: flex;
+  flex-direction: column;
+  .history-card {
+    display: flex;
+    flex-direction: row;
+    margin-top: 1rem;
+    &:first-child {
+      margin-top: 0rem;
+    }
+  }
+}

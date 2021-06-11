@@ -6,7 +6,6 @@ import { AuthContext } from "../../context/authContext";
 
 import MainScreenLogin from "./mainScreenLogin";
 import MainScreenDashboard from "./mainScreenDashboard";
-import BaseLayout from "../common/layout/layout";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -26,17 +25,15 @@ export default function MainScreen() {
   const classes = useStyles();
 
   return (
-    <BaseLayout>
-      <AuthContext.Consumer>
-        {({ isAuth, userDetails, login }) => (
-          <main style={{ width: "100%", height: "100%" }}>
-            {userDetails && isAuth && isAuth() && (
-              <MainScreenDashboard userDetails={userDetails} />
-            )}
-            {login && isAuth && !isAuth() && <MainScreenLogin login={login} />}
-          </main>
-        )}
-      </AuthContext.Consumer>
-    </BaseLayout>
+    <AuthContext.Consumer>
+      {({ isAuth, userDetails, login }) => (
+        <main style={{ width: "100%", height: "100%" }}>
+          {userDetails && isAuth && isAuth() && (
+            <MainScreenDashboard userDetails={userDetails} />
+          )}
+          {isAuth && !isAuth() && <MainScreenLogin />}
+        </main>
+      )}
+    </AuthContext.Consumer>
   );
 }

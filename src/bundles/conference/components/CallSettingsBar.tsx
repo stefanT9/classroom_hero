@@ -6,6 +6,7 @@ import VideocamOffIcon from "@material-ui/icons/VideocamOff";
 import { MicRounded } from "@material-ui/icons";
 import SettingsIcon from "@material-ui/icons/Settings";
 import classes from "./conference.module.scss";
+import MediaStreamSingleton from "../api/MediaStreamUtils";
 
 interface StreamSettings {
   audio: Boolean;
@@ -62,7 +63,27 @@ export default function CallSettingsBar(props: CallSettingsProps) {
           <VideocamOffIcon />
         </IconButton>
       )}
-      <IconButton>
+      <IconButton
+        onClick={() => {
+          MediaStreamSingleton.getInstance()
+            .then((value) => {
+              const caputure = new ImageCapture(value.getVideoTracks()[0]);
+              caputure
+                .takePhoto()
+                .then((photo) => {
+                  const base64 = URL.createObjectURL(photo);
+                  console.log(base64);
+                  
+                })
+                .catch((err) => {
+                  console.log(err);
+                });
+            })
+            .catch((err) => {
+              console.log(err);
+            });
+        }}
+      >
         <SettingsIcon />
       </IconButton>
     </Paper>

@@ -13,14 +13,14 @@ interface AuthContextInterface {
   register: (email: string, password: string) => Promise<any>;
   softLogin: (username: string) => Promise<any>;
   logout: () => Promise<any>;
+  resetPassword: (email: string) => Promise<any>;
   isAuth: () => any;
 }
 export const AuthContext = createContext<Partial<AuthContextInterface>>({});
 
 const AuthContextStore = (props: any) => {
-  const [userDetails, setUserDetails] = useState<UserDetails>(
-    defaultUserDetails
-  );
+  const [userDetails, setUserDetails] =
+    useState<UserDetails>(defaultUserDetails);
 
   const [cookies, setCookie] = useCookies(["access_token"]);
 
@@ -45,7 +45,7 @@ const AuthContextStore = (props: any) => {
       .then((res) => res.json())
       .then((res) => {
         console.log("heres the body", res);
-        if (res.message) {
+        if (res.token === null) {
           throw new Error(res.message);
         }
         setUserDetails({
@@ -54,7 +54,7 @@ const AuthContextStore = (props: any) => {
           token: res.token,
         });
         setCookie("access_token", res.token);
-        return true;
+        return res.user;
       })
       .catch((err) => {
         console.log("heres the error", err);
@@ -64,7 +64,21 @@ const AuthContextStore = (props: any) => {
         };
       });
   };
-  const register = async (email: string, password: string) => {};
+  const register = (email: string, password: string) => {
+    return fetch("/api/auth/register", {
+      method: "POST",
+      body: JSON.stringify({
+        email,
+        password,
+      }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }).then((res) => res.json());
+  };
+  const resetPassword = (email: string) => {
+    return Promise.reject({ message: "not implemented yet" });
+  };
   const logout = async () => {
     setUserDetails(defaultUserDetails);
     setCookie("access_token", null);
@@ -100,7 +114,15 @@ const AuthContextStore = (props: any) => {
 
   return (
     <AuthContext.Provider
-      value={{ userDetails, isAuth, login, register, logout, softLogin }}
+      value={{
+        userDetails,
+        isAuth,
+        login,
+        register,
+        logout,
+        softLogin,
+        resetPassword,
+      }}
     >
       {props.children}
     </AuthContext.Provider>

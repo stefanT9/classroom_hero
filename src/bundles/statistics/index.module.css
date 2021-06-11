@@ -1,0 +1,14 @@
+.history-cards-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.history-cards-list .history-card {
+  display: flex;
+  flex-direction: row;
+  margin-top: 1rem;
+}
+
+.history-cards-list .history-card:first-child {
+  margin-top: 0rem;
+}

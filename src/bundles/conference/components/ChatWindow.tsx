@@ -3,7 +3,6 @@ import {
   Paper,
   IconButton,
   Icon,
-  List,
   TextField,
   makeStyles,
 } from "@material-ui/core";
@@ -13,7 +12,6 @@ import SendIcon from "@material-ui/icons/Send";
 
 import ChatMessage from "./ChatMessage";
 import { useFormik } from "formik";
-import { AuthContext } from "../../../context/authContext";
 import * as yup from "yup";
 
 const useStyles = makeStyles((theme) => ({
@@ -51,6 +49,8 @@ export default function ChatWindow(props: ChatWindowProps) {
           dateTime: new Date(),
         };
         socket.emit("room-chat-message-post", message);
+        console.log("emited message", message);
+        console.log("emited message", socket);
       } else {
         console.log("curently not working", socket);
       }
@@ -66,7 +66,7 @@ export default function ChatWindow(props: ChatWindowProps) {
 
         // recives the message history
         socket.on("room-chat-message-all", (messages: Array<Message>) => {
-          console.log(messages);
+          console.log("emited message", messages);
           setMessages(messages);
         });
 

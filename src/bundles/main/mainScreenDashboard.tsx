@@ -31,22 +31,31 @@ export default function MainScreenDashboard(props: MainScreenAuthProps) {
 
   return (
     <Container>
-      <Typography variant="h2">Past conferences:</Typography>
-      <div>
-        {conferences
-          .filter((conference) => new Date(conference.startTime) < new Date())
-          .map((conference, idx) => (
-            <ConferenceCard conference={conference} />
-          ))}
-      </div>
-      <Typography variant="h2">Future conferences:</Typography>
-      <div>
-        {conferences
-          .filter((conference) => new Date(conference.startTime) >= new Date())
-          .map((conference, idx) => (
-            <ConferenceCard conference={conference} />
-          ))}
-      </div>
+      {(conferences.length === 0 && (
+        <div>
+          <Typography variant="h2">Past conferences:</Typography>
+          <div>
+            {conferences
+              .filter(
+                (conference) => new Date(conference.startTime) < new Date()
+              )
+              .map((conference, idx) => (
+                <ConferenceCard conference={conference} />
+              ))}
+          </div>
+          <Typography variant="h2">Future conferences:</Typography>
+          <div>
+            {conferences
+              .filter(
+                (conference) => new Date(conference.startTime) >= new Date()
+              )
+              .map((conference, idx) => (
+                <ConferenceCard conference={conference} />
+              ))}
+          </div>
+        </div>
+      )) || <Typography>You don't seem to have any conference</Typography>}
+
       <CreateConferenceFab />
     </Container>
   );

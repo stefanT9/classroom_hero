@@ -14,7 +14,11 @@ type Message = {
 interface IConference {
   _id: string;
   name: string;
+  description: string;
   startTime: Date;
+  endTime: Date;
   participantEmails: string[];
   hostId: Types.ObjectId;
 }
+
+interface IConferenceMetadata {}

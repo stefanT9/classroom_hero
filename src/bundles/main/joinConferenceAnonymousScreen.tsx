@@ -4,7 +4,7 @@ import "fontsource-roboto";
 import LoginForm from "../auth/loginForm";
 import { AuthContext } from "../../context/authContext";
 
-export default function MainScreenLogin() {
+export default function JoinConferenceAnonymousScreen() {
   return (
     <Container component="main" maxWidth="xs">
       <Paper>

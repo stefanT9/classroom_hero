@@ -1,9 +1,8 @@
 import React, { useState } from "react";
 import classes from "../common.module.scss";
-import { Grid, Button, Typography, Container } from "@material-ui/core";
-import MenuIcon from "@material-ui/icons/Menu";
-import AuthModal from "../../auth/authModal";
+import { Button, Typography, Container } from "@material-ui/core";
 import ProfileChip from "./profileChip";
+import { useHistory } from "react-router-dom";
 
 interface TopnavProps {
   userDetails: UserDetails;
@@ -13,43 +12,40 @@ interface TopnavProps {
   isAuth: () => boolean;
 }
 export default function Topnav(props: TopnavProps) {
+  const history = useHistory();
   const { userDetails, isAuth, login, register, logout } = props;
-  const [open, setOpen] = useState(false);
-  const handleOpen = () => {
-    setOpen(true);
-  };
-  const handleClose = () => {
-    setOpen(false);
-  };
   console.log(isAuth(), userDetails);
   return (
-    <Grid item xs={12}>
-      <div className={classes["topnav-wrapper"]}>
-        <Container>
-          <div className={classes["topnav"]}>
-            <Button>
-              <MenuIcon className={classes["white-text"]} />
+    <div className={classes["topnav-wrapper"]}>
+      <Container>
+        <div className={classes["topnav"]}>
+          <div>
+            <Button
+              onClick={() => {
+                history.push("/");
+              }}
+            >
+              <Typography className={classes["white-text"]}>
+                Classroom Hero
+              </Typography>
             </Button>
-            {isAuth() && (
-              <ProfileChip userDetails={userDetails} logout={logout} />
-            )}
-            {!isAuth() && (
-              <div>
-                <Button onClick={handleOpen}>
-                  <Typography className={classes["white-text"]}>
-                    Login
-                  </Typography>
-                </Button>
-                <AuthModal
-                  onClose={handleClose}
-                  open={open}
-                  formType={"Login"}
-                />
-              </div>
-            )}
           </div>
-        </Container>
-      </div>
-    </Grid>
+          {isAuth() && (
+            <ProfileChip userDetails={userDetails} logout={logout} />
+          )}
+          {!isAuth() && (
+            <div>
+              <Button
+                onClick={() => {
+                  history.push("/login");
+                }}
+              >
+                <Typography className={classes["white-text"]}>Login</Typography>
+              </Button>
+            </div>
+          )}
+        </div>
+      </Container>
+    </div>
   );
 }

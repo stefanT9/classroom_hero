@@ -1,9 +1,7 @@
-import react from "react";
-import ListItem from "@material-ui/core/ListItem";
+import React from "react";
 import Paper from "@material-ui/core/Paper";
 import Typography from "@material-ui/core/Typography";
 import Container from "@material-ui/core/Container";
-import { AuthContext } from "../../../context/authContext";
 interface ChatMessageProps {
   author: String;
   message: String;

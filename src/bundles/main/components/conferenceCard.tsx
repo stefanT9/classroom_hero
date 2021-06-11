@@ -13,27 +13,28 @@ interface ConferenceCardProps {
 
 export const ConferenceCard = (props: ConferenceCardProps) => {
   const { conference } = props;
+  const startTime: any = conference.startTime;
+  const endTime: any = conference.endTime;
   const history = useHistory();
   const handleJoinConference = () => {
     history.push(`/conference/${conference._id}`);
   };
   return (
     <div>
-      <Typography>{conference.startTime}</Typography>
       <Accordion>
         <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "row",
-              justifyContent: "space-between",
-            }}
-          >
-            <Typography>{conference.name}</Typography>
-          </div>
+          <Typography variant="h5">{conference.name}</Typography>
         </AccordionSummary>
         <AccordionDetails style={{ display: "flex", flexDirection: "column" }}>
-          <Typography>{conference.startTime}</Typography>
+          <Typography variant="h6">
+            Description: {conference.description}
+          </Typography>
+          <Typography variant="h6">
+            From {startTime.replace(/T/, " ").replace(/\..+/, "")}
+          </Typography>
+          <Typography variant="h6">
+            Until {endTime && endTime.replace(/T/, " ").replace(/\..+/, "")}
+          </Typography>
           <Accordion style={{ width: "100%" }}>
             <AccordionSummary expandIcon={<ExpandMoreIcon />}>
               <Typography>{`${conference.participantEmails.length} other participants invited`}</Typography>
@@ -46,13 +47,14 @@ export const ConferenceCard = (props: ConferenceCardProps) => {
               </div>
             </AccordionDetails>
           </Accordion>
-          <Button
-            variant="outlined"
-            classes={{ root: "primary-button" }}
-            onClick={handleJoinConference}
-          >
+          <Button variant="outlined" onClick={handleJoinConference}>
             Join now
           </Button>
+          <Typography>
+            <Link to={`/conference/${conference._id}/stats`}>
+              <Button>Stats</Button>
+            </Link>
+          </Typography>
         </AccordionDetails>
       </Accordion>
     </div>

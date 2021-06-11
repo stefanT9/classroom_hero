@@ -3,13 +3,16 @@ import { Paper, Container } from "@material-ui/core";
 import "fontsource-roboto";
 import LoginForm from "../auth/loginForm";
 import { AuthContext } from "../../context/authContext";
+import ResetPasswordForm from "../auth/resetPasswordForm";
 
-export default function MainScreenLogin() {
+export default function ForgotPaswordScreen() {
   return (
     <Container component="main" maxWidth="xs">
       <Paper>
         <AuthContext.Consumer>
-          {({ login }) => login && <LoginForm login={login} />}
+          {({ resetPassword }) =>
+            resetPassword && <ResetPasswordForm resetPassword={resetPassword} />
+          }
         </AuthContext.Consumer>
       </Paper>
     </Container>
