@@ -4,12 +4,26 @@ export default class MediaStreamSingleton {
     if (MediaStreamSingleton.instance) {
       return MediaStreamSingleton.instance;
     } else {
-      MediaStreamSingleton.instance = navigator.mediaDevices.getUserMedia({
-        video: true,
-        audio: true,
-      });
-
-      return MediaStreamSingleton.instance;
+      return navigator.mediaDevices
+        .enumerateDevices()
+        .then((devices) => {
+          const cam = devices.find((device) => {
+            return device.kind === "videoinput";
+          });
+          const mic = devices.find((device) => {
+            return device.kind === "audioinput";
+          });
+          const constraints = {
+            video: cam && true,
+            audio: mic && true,
+          };
+          MediaStreamSingleton.instance =
+            navigator.mediaDevices.getUserMedia(constraints);
+          return MediaStreamSingleton.instance;
+        })
+        .catch((err) => {
+          throw new Error(err);
+        });
     }
   };
   public static linkToVideoTag = () => {

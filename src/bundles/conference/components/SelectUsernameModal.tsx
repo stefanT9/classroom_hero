@@ -1,4 +1,13 @@
-import { Button, Modal, Paper, TextField } from "@material-ui/core";
+import {
+  Button,
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  Modal,
+  Paper,
+  TextField,
+  Typography,
+} from "@material-ui/core";
 import { useFormik } from "formik";
 
 import React from "react";
@@ -32,40 +41,42 @@ const SelectUsernameModal = (props: SelectUsernameModalProps) => {
   });
 
   return (
-    <Modal
-      style={{
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-      }}
-      open={open}
-    >
-      <Paper>
+    <Dialog open={open}>
+      <DialogTitle>Please tell us about you before joining</DialogTitle>
+      <DialogContent>
         <form
-          style={{ display: "flex", flexDirection: "column" }}
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            gap: "0.5rem",
+          }}
           onSubmit={formik.handleSubmit}
         >
           <TextField
             id="username"
             name="username"
             label="username"
+            variant="outlined"
             onChange={formik.handleChange}
           ></TextField>
           <TextField
             id="email"
             name="email"
             label="email"
+            variant="outlined"
             onChange={formik.handleChange}
           ></TextField>
           <Button
             disabled={formik.isSubmitting || !formik.isValid}
+            variant="contained"
+            color="primary"
             type="submit"
           >
-            set name
+            Join
           </Button>
         </form>
-      </Paper>
-    </Modal>
+      </DialogContent>
+    </Dialog>
   );
 };
 

@@ -31,7 +31,7 @@ export default function MainScreenDashboard(props: MainScreenAuthProps) {
 
   return (
     <Container>
-      {(conferences.length === 0 && (
+      {conferences.length !== 0 ? (
         <div>
           <Typography variant="h2">Past conferences:</Typography>
           <div>
@@ -54,7 +54,9 @@ export default function MainScreenDashboard(props: MainScreenAuthProps) {
               ))}
           </div>
         </div>
-      )) || <Typography>You don't seem to have any conference</Typography>}
+      ) : (
+        <Typography>You don't seem to have any conference</Typography>
+      )}
 
       <CreateConferenceFab />
     </Container>

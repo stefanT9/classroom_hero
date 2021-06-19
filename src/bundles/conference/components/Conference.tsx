@@ -23,12 +23,11 @@ export default function Conference(props: ConferenceProps) {
   });
 
   const { userDetails } = props;
-  //todo:fix type
+  // todo:fix type
   const [peers, setPeers] = useState<Array<any>>([]);
   const { conferenceId } = useParams<ConferenceParams>();
   const [socket, setSocket] = useState<any>(null);
   const [peer, setPeer] = useState<any>(null);
-
   useEffect(() => {
     try {
       const { peer, changeMediaStream } = getPeer(userDetails);

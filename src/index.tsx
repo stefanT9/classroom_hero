@@ -28,8 +28,8 @@ ReactDOM.render(
     <ThemeProvider theme={theme}>
       <AuthContextStore>
         <AlertStore>
-          <BaseLayout>
-            <Router>
+          <Router>
+            <BaseLayout>
               <Route exact path="/" children={<MainScreen />} />
               <Route exact path="/login" children={<MainScreenLogin />} />
               <Route exact path="/register" children={<RegisterScreen />} />
@@ -67,8 +67,8 @@ ReactDOM.render(
                   </AuthContext.Consumer>
                 }
               />
-            </Router>
-          </BaseLayout>
+            </BaseLayout>
+          </Router>
         </AlertStore>
       </AuthContextStore>
     </ThemeProvider>

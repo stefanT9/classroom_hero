@@ -105,9 +105,15 @@ const AuthContextStore = (props: any) => {
           }));
         } else {
           console.log(res.error);
+          setUserDetails({
+            ...defaultUserDetails,
+          });
         }
       })
       .catch((err) => {
+        setUserDetails({
+          ...defaultUserDetails,
+        });
         console.error(err);
       });
   }, []);

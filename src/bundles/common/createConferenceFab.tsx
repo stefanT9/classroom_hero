@@ -23,7 +23,7 @@ export const CreateConferenceFab = (props: any) => {
     })
       .then((res) => res.json())
       .then((res) => {
-        return res;
+        if (!res.conference) throw new Error("Could not schedule conference");
       })
       .catch((err) => {
         throw new Error(err);

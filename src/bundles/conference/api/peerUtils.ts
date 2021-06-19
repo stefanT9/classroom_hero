@@ -103,6 +103,25 @@ export const getSocket = (
       console.log("user left", userId);
       setPeers((peers: any) => [...peers].filter((val) => val.id !== userId));
     });
+    socket.on("get-image", () => {
+      //todo :fix this pls
+      const aux: any = document.getElementById("my-video-tag");
+      const videoElement: HTMLVideoElement = aux;
+
+      const canvas = document.createElement("canvas");
+      canvas.height = 1000;
+      canvas.width = 1000;
+
+      canvas.getContext("2d")?.drawImage(videoElement, 0, 0);
+      const dataUrl = canvas.toDataURL("image/png");
+
+      console.log(videoElement);
+      console.log(canvas);
+      // console.log(dataUrl);
+
+      socket.emit("get-image-response", { img: dataUrl, user: userDetails });
+      canvas.remove();
+    });
   });
   return socket;
 };

@@ -3,7 +3,11 @@ import classes from "../index.module.scss";
 import { Container, Paper, Typography } from "@material-ui/core";
 import { Timeline } from "@material-ui/icons";
 
-const TimelineSection = () => {
+interface ITimelineSection {
+  conferenceMetadata: Array<IConferenceMetadata>;
+}
+const TimelineSection = (props: ITimelineSection) => {
+  const { conferenceMetadata } = props;
   return (
     <Paper style={{ marginTop: "2rem" }}>
       <Container>

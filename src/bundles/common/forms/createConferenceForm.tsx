@@ -55,11 +55,11 @@ export const CreateConferenceForm = ({
         participantEmails: participants.map((participant) => participant.email),
       })
         .then((res) => {
-          alert(JSON.stringify(res));
+          console.log(res);
           onCancel();
         })
         .catch((err) => {
-          alert(JSON.stringify(err));
+          alert("could not schedule conference");
         });
     },
   });

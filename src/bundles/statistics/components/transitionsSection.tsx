@@ -4,7 +4,11 @@ import { Container, Paper, Typography } from "@material-ui/core";
 import { Chart } from "react-google-charts";
 import { randomInt } from "d3";
 
-const TransitionsSection = () => {
+interface ITransitionSection {
+  conferenceMetadata: Array<IConferenceMetadata>;
+}
+const TransitionsSection = (props: ITransitionSection) => {
+  const { conferenceMetadata } = props;
   const getData = (from?: Date, until?: Date) => {
     const data: any[] = [["From", "To", "Count"]];
     const emotions = [
