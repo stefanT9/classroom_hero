@@ -2,7 +2,7 @@
   "name": "classroom_hero",
   "version": "0.1.0",
   "private": true,
-  "proxy": "http://localhost:9000",
+  "proxy": "http://localhost:9001",
   "dependencies": {
     "@auth0/auth0-react": "^1.2.0",
     "@date-io/date-fns": "^1.3.13",
