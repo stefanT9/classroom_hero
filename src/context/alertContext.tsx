@@ -2,7 +2,7 @@ import React, { createContext, useContext, useState } from "react";
 import { IconButton, Collapse } from "@material-ui/core";
 import CloseIcon from "@material-ui/icons/Close";
 import Alert from "@material-ui/lab/Alert";
-
+import { v4 } from "uuid";
 interface IAlertContext {
   openAlert: (message: string, severity: AlertSeverity) => any;
 }
@@ -10,6 +10,7 @@ interface IAlert {
   open: boolean;
   message: string;
   severity: AlertSeverity;
+  id: string;
 }
 type AlertSeverity = "error" | "warning" | "info" | "success";
 
@@ -20,7 +21,18 @@ export const AlertContext = createContext<IAlertContext>({
 export const AlertStore = (props: any) => {
   const [alerts, setAlerts] = useState<Array<IAlert>>([]);
   const openAlert = (message: string, severity: AlertSeverity) => {
-    setAlerts((prev) => [...prev, { message, severity, open: true }]);
+    const id = v4();
+    setAlerts((prev) => [...prev, { message, severity, open: true, id }]);
+    setTimeout(() => {
+      setAlerts((prev) =>
+        prev.map((val) =>
+          val.id === id ? { ...val, open: false } : { ...val }
+        )
+      );
+      setTimeout(() => {
+        setAlerts((prev) => prev.filter((val) => val.id !== id));
+      }, 1000);
+    }, 2000);
   };
   const closeAlert = (idx: number) => {
     setAlerts((prev) => prev.filter((_, idx2) => idx !== idx2));

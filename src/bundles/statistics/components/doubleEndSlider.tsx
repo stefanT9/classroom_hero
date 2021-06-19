@@ -16,9 +16,7 @@ export const DoubleEndSlider = (props: DoubleEndSlider) => {
       <input
         step={1}
         value={left}
-        onChange={(event) => {
-          if (Number(event.target.value) < right) setLeft(event);
-        }}
+        onChange={setLeft}
         min={min}
         max={max}
         type="range"
@@ -26,9 +24,7 @@ export const DoubleEndSlider = (props: DoubleEndSlider) => {
       <input
         step={1}
         value={right}
-        onChange={(event) => {
-          if (Number(event.target.value) > left) setRight(event);
-        }}
+        onChange={setRight}
         min={min}
         max={max}
         type="range"

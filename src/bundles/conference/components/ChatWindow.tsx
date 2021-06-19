@@ -38,10 +38,9 @@ export default function ChatWindow(props: ChatWindowProps) {
       message: "",
     },
     validationSchema: validationSchema,
-    onSubmit: (values) => {
+    onSubmit: (values, { resetForm }) => {
+      resetForm();
       if (socket) {
-        console.log("message sent");
-
         const message = {
           userId: userDetails.id,
           username: userDetails.username,
@@ -49,8 +48,6 @@ export default function ChatWindow(props: ChatWindowProps) {
           dateTime: new Date(),
         };
         socket.emit("room-chat-message-post", message);
-        console.log("emited message", message);
-        console.log("emited message", socket);
       } else {
         console.log("curently not working", socket);
       }
@@ -72,7 +69,6 @@ export default function ChatWindow(props: ChatWindowProps) {
 
         // recives a new message
         socket.on("room-chat-message-post", (message: Message) => {
-          console.log("something good here");
           message.dateTime = new Date(message.dateTime);
           setMessages((messages) => [...messages, message]);
         });

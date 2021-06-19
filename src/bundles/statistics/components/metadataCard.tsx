@@ -7,16 +7,18 @@ export const MetadataCard = ({
   metadata: IConferenceMetadata;
 }) => {
   console.log("card details =>", metadata);
+  const time = new Date(metadata.timestamp);
+
   if (metadata.type === "absent") {
     return (
       <Card>
-        <Typography>at: {metadata.timestamp} wasn't present</Typography>
+        <Typography>at: {time.toLocaleTimeString()} wasn't present</Typography>
       </Card>
     );
   } else if (metadata.type === "emotions") {
     return (
       <Card>
-        <Typography>at: {metadata.timestamp}</Typography>
+        <Typography>at: {time.toLocaleTimeString()}</Typography>
         <Typography>anger: {metadata.metadata?.anger}</Typography>
         <Typography>joyful: {metadata.metadata?.joy}</Typography>
         <Typography>sorrwful: {metadata.metadata?.sorrow}</Typography>
@@ -26,7 +28,7 @@ export const MetadataCard = ({
   } else if (metadata.type === "message") {
     return (
       <Card>
-        <Typography>at: {metadata.timestamp}</Typography>
+        <Typography>at: {time.toLocaleTimeString()}</Typography>
         <Typography>sent message: {metadata.metadata?.message}</Typography>
       </Card>
     );

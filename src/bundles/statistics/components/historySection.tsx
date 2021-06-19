@@ -62,7 +62,9 @@ const HistorySection = (props: IHistorySectionProps) => {
         <Typography>
           and {before.toLocaleDateString()} {before.toLocaleTimeString()}
         </Typography>
-        <DoubleEndSlider
+        {/* ----------------------------------------- */}
+        {/* When dis was enabled it made the app lag hard */}
+        {/* <DoubleEndSlider
           left={after.getTime() / 1000}
           right={before.getTime() / 1000}
           min={minDate.getTime() / 1000}
@@ -74,7 +76,9 @@ const HistorySection = (props: IHistorySectionProps) => {
           setRight={(event: any) => {
             setBefore(new Date(event.target.value * 1000));
           }}
-        />
+        /> */}
+        {/* ----------------------------------------- */}
+
         <div className={classes["history-cards-list"]}>
           {usersMetadata.map((val) => (
             <Accordion>
@@ -132,7 +136,7 @@ const HistorySection = (props: IHistorySectionProps) => {
                     data={[["From", "To", "Weight"], ...getJoyEvolution(val)]}
                     rootProps={{ "data-testid": "1" }}
                   />
-                  <Typography>Absent transitions</Typography>
+                  {/* <Typography>Absent transitions</Typography>
                   <Chart
                     width={600}
                     height={"300px"}
@@ -143,7 +147,7 @@ const HistorySection = (props: IHistorySectionProps) => {
                       ...getAbsentEvolution(val),
                     ]}
                     rootProps={{ "data-testid": "1" }}
-                  />
+                  /> */}
                   <div
                     style={{
                       display: "flex",

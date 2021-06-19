@@ -6,28 +6,27 @@ const mediaStream = MediaStreamSingleton.getInstance();
 export const getPeer = (userDetails: UserDetails) => {
   const changeMediaStream = () => {};
 
-  if (userDetails.id === null) {
-    throw new Error("kill me pls");
-  }
+  // if (userDetails.id === null) {
+  //   throw new Error("kill me pls");
+  // }
 
   // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   // const host = 'localhost' || "projects.zicar.info"
-  const myPeer = new Peer(userDetails.id, {
-    host: "projects.zicar.info",
-    port: 9000,
-    path: "/signaling",
-  });
+  const myPeer = new Peer();
+  // , {
+  //   host: "localhost",
+  //   port: 9001,
+  //   path: "/signaling",
+  // });
   myPeer.on("connection", (connection) => {
     connection.on("data", (message) => {});
   });
 
   myPeer.on("call", function (call) {
-    console.log("im calling you baby");
     mediaStream
       .then((stream) => {
         call.answer(stream);
         call.on("stream", (remoteStream) => {
-          console.log("you're always answering ");
           //
         });
       })
@@ -45,9 +44,12 @@ export const getSocket = (
   setPeers: Function
 ) => {
   const socket = socketIOClient();
+  console.log(peer);
+  console.log(socket);
   peer.on("open", (id: any) => {
+    console.log("something bad man");
     socket.emit("join-room", {
-      id: userDetails.id,
+      id: peer.id,
       username: userDetails.username,
       room: conferenceId,
     });
@@ -118,10 +120,6 @@ export const getSocket = (
 
       canvas.getContext("2d")?.drawImage(videoElement, 0, 0);
       const dataUrl = canvas.toDataURL("image/png");
-
-      console.log(videoElement);
-      console.log(canvas);
-      // console.log(dataUrl);
 
       socket.emit("get-image-response", { img: dataUrl, user: userDetails });
       canvas.remove();
