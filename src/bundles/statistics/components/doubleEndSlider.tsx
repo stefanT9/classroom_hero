@@ -14,17 +14,21 @@ export const DoubleEndSlider = (props: DoubleEndSlider) => {
   return (
     <div>
       <input
-        step={1000}
+        step={1}
         value={left}
-        onChange={setLeft}
+        onChange={(event) => {
+          if (Number(event.target.value) < right) setLeft(event);
+        }}
         min={min}
         max={max}
         type="range"
       />
       <input
-        step={1000}
+        step={1}
         value={right}
-        onChange={setRight}
+        onChange={(event) => {
+          if (Number(event.target.value) > left) setRight(event);
+        }}
         min={min}
         max={max}
         type="range"

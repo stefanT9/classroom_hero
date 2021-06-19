@@ -63,11 +63,12 @@ const HistorySection = (props: IHistorySectionProps) => {
           and {before.toLocaleDateString()} {before.toLocaleTimeString()}
         </Typography>
         <DoubleEndSlider
-          left={after.getTime()}
-          right={before.getTime()}
-          min={minDate.getTime()}
-          max={maxDate.getTime()}
+          left={after.getTime() / 1000}
+          right={before.getTime() / 1000}
+          min={minDate.getTime() / 1000}
+          max={maxDate.getTime() / 1000}
           setLeft={(event: any) => {
+            console.log(event.target.value);
             setAfter(new Date(event.target.value * 1000));
           }}
           setRight={(event: any) => {

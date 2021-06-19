@@ -10,8 +10,10 @@ export const getPeer = (userDetails: UserDetails) => {
     throw new Error("kill me pls");
   }
 
+  // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+  // const host = 'localhost' || "projects.zicar.info"
   const myPeer = new Peer(userDetails.id, {
-    host: "localhost",
+    host: "projects.zicar.info",
     port: 9000,
     path: "/signaling",
   });
