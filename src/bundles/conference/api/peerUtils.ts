@@ -22,10 +22,12 @@ export const getPeer = (userDetails: UserDetails) => {
   });
 
   myPeer.on("call", function (call) {
+    console.log("im calling you baby");
     mediaStream
       .then((stream) => {
         call.answer(stream);
         call.on("stream", (remoteStream) => {
+          console.log("you're always answering ");
           //
         });
       })
