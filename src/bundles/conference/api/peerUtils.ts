@@ -22,18 +22,18 @@ export const getPeer = (userDetails: UserDetails) => {
     connection.on("data", (message) => {});
   });
 
-  myPeer.on("call", function (call) {
-    mediaStream
-      .then((stream) => {
-        call.answer(stream);
-        call.on("stream", (remoteStream) => {
-          //
-        });
-      })
-      .catch((err) => {
-        console.log("failed to get stream", err);
-      });
-  });
+  // myPeer.on("call", function (call) {
+  //   mediaStream
+  //     .then((stream) => {
+  //       call.answer(stream);
+  //       call.on("stream", (remoteStream) => {
+  //         //
+  //       });
+  //     })
+  //     .catch((err) => {
+  //       console.log("failed to get stream", err);
+  //     });
+  // });
   return { peer: myPeer, changeMediaStream };
 };
 
@@ -53,58 +53,118 @@ export const getSocket = (
       username: userDetails.username,
       room: conferenceId,
     });
+    peer.on("connection", (dataconnection: any) => {
+      console.log("metadata connection =>", dataconnection.metadata);
+    });
+    peer.on("call", (call: any) => {
+      console.log("recieved call => ", call.metadata);
+      console.log(call.metadata);
+      const { id, username } = call.metadata.user;
+
+      setTimeout(() => {
+        setPeers((prev: any) => [...prev, { id, username, ref: undefined }]);
+
+        mediaStream
+          .then((stream) => {
+            call.answer(stream);
+            call.on("stream", (remoteStream: any) => {
+              const videoTag: any = document.getElementById(`video${id}`);
+              try {
+                console.log("added element to stream");
+                videoTag.srcObject = remoteStream;
+              } catch (err) {
+                console.log(err);
+              }
+            });
+            call.on("close", (stream: any) => {
+              setPeers((prev: any) => prev.filter((val: any) => val.id !== id));
+              call.close();
+            });
+            call.on("error", (err: any) => {
+              setPeers((prev: any) => prev.filter((val: any) => val.id !== id));
+              call.close();
+            });
+          })
+          .catch((err) => {
+            console.log("failed to get stream", err);
+          });
+      }, 0);
+    });
     //todo fix this type
     socket.on("message", (data: any) => {
       console.log(data);
     });
-    // todo: fix this type
-    socket.on("room-users", ({ users }: any) => {
-      setPeers(
-        users
-          .filter((user: any) => user.id !== id)
-          .map((user: any) => ({
-            id: user.id,
-            username: user.username,
-            ref: undefined,
-          }))
-      );
-      users
-        .filter((user: any) => user.id !== id)
-        .forEach((user: any) => {
-          const peerDataConnection = peer.connect(user.id);
-
-          peerDataConnection.on("open", () => {
-            peerDataConnection.send("im in");
-          });
-
-          mediaStream
-            .then((stream) => {
-              const peerCallConnection = peer.call(user.id, stream);
-              peerCallConnection.on("stream", (remoteStream: any) => {
-                // todo: fix type here
-                const videoTag: any = document.getElementById(
-                  `video${user.id}`
-                );
-                try {
-                  console.log("added element to stream");
-                  videoTag.srcObject = remoteStream;
-                } catch (err) {
-                  console.log(err);
-                }
-              });
-            })
-            .catch((err) => {
-              console.log("error getting mediaStream", err);
-            });
+    socket.on("user-joined", ({ user }: { user: any }) => {
+      const { id, username, room } = user;
+      setPeers((prev: any) => [...prev, { id, username, ref: undefined }]);
+      mediaStream.then((stream) => {
+        console.log("call you baby =>", user);
+        const peerCall = peer.call(id, stream, { metadata: { user } });
+        peerCall.on("stream", (remoteStream: any) => {
+          const videoTag: any = document.getElementById(`video${user.id}`);
+          try {
+            console.log("added element to stream");
+            videoTag.srcObject = remoteStream;
+          } catch (err) {
+            console.log(err);
+          }
         });
+        peerCall.on("close", (stream: any) => {
+          peerCall.close();
+        });
+        peerCall.on("error", (err: any) => {
+          peerCall.close();
+        });
+      });
     });
-    socket.on("room-users-joined", ({ userId, username }: any) => {
-      console.log("user joined", userId, username);
-      setPeers((peers: any) => [
-        ...peers,
-        { id: userId, username: username, ref: undefined },
-      ]);
-    });
+    // todo: fix this type
+    // socket.on("room-users", ({ users }: any) => {
+    //   setPeers(
+    //     users
+    //       .filter((user: any) => user.id !== id)
+    //       .map((user: any) => ({
+    //         id: user.id,
+    //         username: user.username,
+    //         ref: undefined,
+    //       }))
+    //   );
+    //   users
+    //     .filter((user: any) => user.id !== id)
+    //     .forEach((user: any) => {
+    //       const peerDataConnection = peer.connect(user.id);
+
+    //       peerDataConnection.on("open", () => {
+    //         peerDataConnection.send("im in");
+    //       });
+
+    //       mediaStream
+    //         .then((stream) => {
+    //           const peerCallConnection = peer.call(user.id, stream);
+    //           peerCallConnection.on("stream", (remoteStream: any) => {
+    //             // todo: fix type here
+    //             const videoTag: any = document.getElementById(
+    //               `video${user.id}`
+    //             );
+    //             try {
+    //               console.log("added element to stream");
+    //               videoTag.srcObject = remoteStream;
+    //             } catch (err) {
+    //               console.log(err);
+    //             }
+    //           });
+    //         })
+    //         .catch((err) => {
+    //           console.log("error getting mediaStream", err);
+    //         });
+    //     });
+    // });
+    // socket.on("room-users-joined", ({ userId, username }: any) => {
+    //   console.log("user joined", userId, username);
+    //   setPeers((peers: any) => [
+    //     ...peers,
+    //     { id: userId, username: username, ref: undefined },
+    //   ]);
+    // });
     socket.on("room-users-left", ({ userId }: any) => {
       console.log("user left", userId);
       setPeers((peers: any) => [...peers].filter((val) => val.id !== userId));
