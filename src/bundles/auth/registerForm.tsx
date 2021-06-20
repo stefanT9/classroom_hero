@@ -6,12 +6,19 @@ import { AlertContext } from "../../context/alertContext";
 import { useHistory } from "react-router-dom";
 
 interface IRegisterFormProps {
-  register: (email: string, password: string) => Promise<any>;
+  register: (
+    email: string,
+    password: string,
+    firstName: string,
+    lastName: string
+  ) => Promise<any>;
 }
 
 const registerValidationSchema = yup.object({
   email: yup.string().email().required(),
   password: yup.string().required(),
+  firstName: yup.string().required(),
+  lastName: yup.string().required(),
 });
 
 const RegisterForm = (props: IRegisterFormProps) => {
@@ -21,8 +28,8 @@ const RegisterForm = (props: IRegisterFormProps) => {
   const alertContext = useContext(AlertContext);
 
   const formik = useFormik({
-    onSubmit: () => {
-      register(formik.values.email, formik.values.password)
+    onSubmit: ({ email, firstName, lastName, password }) => {
+      register(email, password, firstName, lastName)
         .then((res) => {
           if (res.message) {
             throw new Error("Could not register please try again");

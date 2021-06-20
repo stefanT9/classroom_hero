@@ -32,13 +32,13 @@ const ProfileChip = (props: ProfileChipProps) => {
         >
           <Typography>Dashboard</Typography>
         </MenuItem>
-        <MenuItem
+        {/* <MenuItem
           onClick={() => {
             history.push("/profile");
           }}
         >
           <Typography>Profile</Typography>
-        </MenuItem>
+        </MenuItem> */}
         <MenuItem
           onClick={() => {
             logout();

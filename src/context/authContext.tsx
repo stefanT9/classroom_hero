@@ -10,7 +10,12 @@ const defaultUserDetails: UserDetails = {
 interface AuthContextInterface {
   userDetails: UserDetails;
   login: (email: string, password: string) => Promise<any>;
-  register: (email: string, password: string) => Promise<any>;
+  register: (
+    email: string,
+    password: string,
+    firstName: string,
+    lastName: string
+  ) => Promise<any>;
   softLogin: (username: string) => Promise<any>;
   logout: () => Promise<any>;
   resetPassword: (email: string) => Promise<any>;
@@ -64,12 +69,19 @@ const AuthContextStore = (props: any) => {
         };
       });
   };
-  const register = (email: string, password: string) => {
+  const register = (
+    email: string,
+    password: string,
+    firstName: string,
+    lastName: string
+  ) => {
     return fetch("/api/auth/register", {
       method: "POST",
       body: JSON.stringify({
         email,
         password,
+        firstName,
+        lastName,
       }),
       headers: {
         "Content-Type": "application/json",

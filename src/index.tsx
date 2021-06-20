@@ -54,7 +54,7 @@ ReactDOM.render(
                 children={<ConferenceStatisticsScreen />}
               />
 
-              <Route
+              {/* <Route
                 exact
                 path="/profile"
                 children={
@@ -66,7 +66,7 @@ ReactDOM.render(
                     }
                   </AuthContext.Consumer>
                 }
-              />
+              /> */}
             </BaseLayout>
           </Router>
         </AlertStore>

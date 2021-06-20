@@ -7,13 +7,12 @@ import { useHistory } from "react-router-dom";
 interface TopnavProps {
   userDetails: UserDetails;
   login: (email: string, password: string) => void;
-  register: (email: string, password: string) => void;
   logout: () => void;
   isAuth: () => boolean;
 }
 export default function Topnav(props: TopnavProps) {
   const history = useHistory();
-  const { userDetails, isAuth, login, register, logout } = props;
+  const { userDetails, isAuth, login, logout } = props;
   console.log(isAuth(), userDetails);
   return (
     <div className={classes["topnav-wrapper"]}>

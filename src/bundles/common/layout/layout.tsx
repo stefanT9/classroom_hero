@@ -15,7 +15,6 @@ const BaseLayout = ({ children }: any) => {
               userDetails={userDetails}
               login={login}
               logout={logout}
-              register={register}
               isAuth={isAuth}
             />
           )

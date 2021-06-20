@@ -1,6 +1,6 @@
 import "fontsource-roboto";
-import React, { useState, useEffect } from "react";
-import { Container, Typography } from "@material-ui/core";
+import React, { useState, useEffect, useRef } from "react";
+import { Button, Container, Typography } from "@material-ui/core";
 import { ConferenceCard } from "./components/conferenceCard";
 import { CreateConferenceFab } from "../common/createConferenceFab";
 
@@ -11,6 +11,7 @@ interface MainScreenAuthProps {
 export default function MainScreenDashboard(props: MainScreenAuthProps) {
   const { userDetails } = props;
   const [conferences, setConferences] = useState<Array<IConference>>([]);
+  const fabRef: any = useRef(null);
 
   useEffect(() => {
     fetch("/api/conference/available")
@@ -55,10 +56,41 @@ export default function MainScreenDashboard(props: MainScreenAuthProps) {
           </div>
         </div>
       ) : (
-        <Typography>You don't seem to have any conference</Typography>
+        <div
+          style={{
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%,-50%)",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            gap: "1rem",
+          }}
+        >
+          <Typography variant="h4" align="center">
+            I haven't found any conference, maybe you should create one
+          </Typography>
+          <Button
+            size="large"
+            color="primary"
+            variant="contained"
+            onClick={() => {
+              try {
+                fabRef.current.children[0].children[0].click();
+              } catch (err) {
+                console.log(err);
+              }
+            }}
+          >
+            <Typography variant="h5">Create conference</Typography>
+          </Button>
+        </div>
       )}
 
-      <CreateConferenceFab />
+      <div ref={fabRef}>
+        <CreateConferenceFab />
+      </div>
     </Container>
   );
 }
