@@ -96,10 +96,22 @@ export const getSocket = (
     });
     socket.on("user-joined", ({ user }: { user: any }) => {
       const { id, username, room } = user;
+      console.log("user joined => ", user);
       setPeers((prev: any) => [...prev, { id, username, ref: undefined }]);
       mediaStream.then((stream) => {
-        console.log("call you baby =>", user);
-        const peerCall = peer.call(id, stream, { metadata: { user } });
+        console.log("call you baby =>", {
+          id: peer.id,
+          username: userDetails.username,
+        });
+
+        const peerCall = peer.call(id, stream, {
+          metadata: {
+            user: {
+              id: peer.id,
+              username: userDetails.username,
+            },
+          },
+        });
         peerCall.on("stream", (remoteStream: any) => {
           const videoTag: any = document.getElementById(`video${user.id}`);
           try {
