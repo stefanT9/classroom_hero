@@ -96,14 +96,8 @@ export const getSocket = (
     });
     socket.on("user-joined", ({ user }: { user: any }) => {
       const { id, username, room } = user;
-      console.log("user joined => ", user);
       setPeers((prev: any) => [...prev, { id, username, ref: undefined }]);
       mediaStream.then((stream) => {
-        console.log("call you baby =>", {
-          id: peer.id,
-          username: userDetails.username,
-        });
-
         const peerCall = peer.call(id, stream, {
           metadata: {
             user: {

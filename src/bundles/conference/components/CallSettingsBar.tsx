@@ -72,8 +72,6 @@ export default function CallSettingsBar(props: CallSettingsProps) {
                 .takePhoto()
                 .then((photo) => {
                   const base64 = URL.createObjectURL(photo);
-                  console.log(base64);
-                  
                 })
                 .catch((err) => {
                   console.log(err);
