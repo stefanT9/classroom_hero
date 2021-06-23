@@ -6,7 +6,6 @@ export const MetadataCard = ({
 }: {
   metadata: IConferenceMetadata;
 }) => {
-  console.log("card details =>", metadata);
   const time = new Date(metadata.timestamp);
 
   if (metadata.type === "absent") {

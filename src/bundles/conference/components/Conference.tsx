@@ -93,7 +93,7 @@ export default function Conference(props: ConferenceProps) {
           <Paper className={classes.mainScreen}>
             <div
               className={classes.participantWrapper}
-              style={{ backgroundColor: "cyan" }}
+              style={{ backgroundColor: "#1ba261" }}
             >
               <video
                 id="my-video-tag"
@@ -114,7 +114,7 @@ export default function Conference(props: ConferenceProps) {
               return (
                 <div
                   className={classes.participantWrapper}
-                  style={{ backgroundColor: getRandomColor() }}
+                  style={{ backgroundColor: "#1ba261" }}
                 >
                   <video
                     id={`video${val.id}`}

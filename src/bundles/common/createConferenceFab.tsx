@@ -3,8 +3,10 @@ import Fab from "@material-ui/core/Fab";
 import AddIcon from "@material-ui/icons/Add";
 import { Dialog, DialogContent, DialogTitle } from "@material-ui/core";
 import { CreateConferenceForm } from "./forms/createConferenceForm";
+import { useHistory } from "react-router";
 
 export const CreateConferenceFab = (props: any) => {
+  const history = useHistory();
   const [open, setOpen] = useState(false);
 
   const handleOpen = () => {
@@ -24,6 +26,7 @@ export const CreateConferenceFab = (props: any) => {
       .then((res) => res.json())
       .then((res) => {
         if (!res.conference) throw new Error("Could not schedule conference");
+        history.go(0);
       })
       .catch((err) => {
         throw new Error(err);

@@ -25,7 +25,9 @@ export const ConferenceCard = (props: ConferenceCardProps) => {
         <AccordionSummary expandIcon={<ExpandMoreIcon />}>
           <Typography variant="h5">{conference.name}</Typography>
         </AccordionSummary>
-        <AccordionDetails style={{ display: "flex", flexDirection: "column" }}>
+        <AccordionDetails
+          style={{ display: "flex", flexDirection: "column", gap: "1rem" }}
+        >
           <Typography variant="h6">
             Description: {conference.description}
           </Typography>
@@ -47,14 +49,22 @@ export const ConferenceCard = (props: ConferenceCardProps) => {
               </div>
             </AccordionDetails>
           </Accordion>
-          <Button variant="outlined" onClick={handleJoinConference}>
+          <Button
+            color="primary"
+            variant="contained"
+            onClick={handleJoinConference}
+          >
             Join now
           </Button>
-          <Typography>
-            <Link to={`/conference/${conference._id}/stats`}>
-              <Button>Stats</Button>
-            </Link>
-          </Typography>
+          <Button
+            color="primary"
+            variant="contained"
+            onClick={() => {
+              history.push(`/conference/${conference._id}/stats`);
+            }}
+          >
+            See the stats
+          </Button>
         </AccordionDetails>
       </Accordion>
     </div>

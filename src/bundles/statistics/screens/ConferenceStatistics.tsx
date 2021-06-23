@@ -6,6 +6,7 @@ import TimelineSection from "../components/timelineSection";
 import TransitionsSection from "../components/transitionsSection";
 import axios from "axios";
 import { useParams } from "react-router-dom";
+import SummarySection from "../components/summary";
 
 const ConferenceStatisticsScreen = () => {
   const { conferenceId } = useParams<any>();
@@ -92,12 +93,20 @@ const ConferenceStatisticsScreen = () => {
           <CircularProgress />
         </Paper>
       )) || (
-        <HistorySection
-          usersMetadata={usersMetadata}
-          emotionMetadata={emotionMetadata}
-          absentMetadata={absentMetadata}
-          messageMetadata={messageMetadata}
-        />
+        <div>
+          <SummarySection
+            usersMetadata={usersMetadata}
+            emotionMetadata={emotionMetadata}
+            absentMetadata={absentMetadata}
+            messageMetadata={messageMetadata}
+          />
+          <HistorySection
+            usersMetadata={usersMetadata}
+            emotionMetadata={emotionMetadata}
+            absentMetadata={absentMetadata}
+            messageMetadata={messageMetadata}
+          />
+        </div>
       )}
     </Container>
   );

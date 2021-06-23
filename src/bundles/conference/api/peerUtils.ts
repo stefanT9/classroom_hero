@@ -108,6 +108,7 @@ export const getSocket = (
         });
         peerCall.on("stream", (remoteStream: any) => {
           const videoTag: any = document.getElementById(`video${user.id}`);
+          console.log("remote-stream", remoteStream);
           try {
             console.log("added element to stream");
             videoTag.srcObject = remoteStream;
